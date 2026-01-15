@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>PedroPathing.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #7a7e85;}
+.s4 { color: #2aacb8;}
+.s5 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+PedroPathing.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">org</span><span class="s2">.</span><span class="s1">firstinspires</span><span class="s2">.</span><span class="s1">ftc</span><span class="s2">.</span><span class="s1">teamcode</span><span class="s2">.</span><span class="s1">pedroPathing</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">pedropathing</span><span class="s2">.</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">Follower</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">pedropathing</span><span class="s2">.</span><span class="s1">geometry</span><span class="s2">.</span><span class="s1">BezierLine</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">pedropathing</span><span class="s2">.</span><span class="s1">geometry</span><span class="s2">.</span><span class="s1">Pose</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">pedropathing</span><span class="s2">.</span><span class="s1">paths</span><span class="s2">.</span><span class="s1">PathChain</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">qualcomm</span><span class="s2">.</span><span class="s1">robotcore</span><span class="s2">.</span><span class="s1">eventloop</span><span class="s2">.</span><span class="s1">opmode</span><span class="s2">.</span><span class="s1">OpMode</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">qualcomm</span><span class="s2">.</span><span class="s1">robotcore</span><span class="s2">.</span><span class="s1">eventloop</span><span class="s2">.</span><span class="s1">opmode</span><span class="s2">.</span><span class="s1">TeleOp</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">firstinspires</span><span class="s2">.</span><span class="s1">ftc</span><span class="s2">.</span><span class="s1">robotcore</span><span class="s2">.</span><span class="s1">external</span><span class="s2">.</span><span class="s1">StateMachine</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Timer</span><span class="s2">;</span>
+
+<span class="s1">@TeleOp</span>
+<span class="s0">public class </span><span class="s1">PedroPathing </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+    <span class="s0">private </span><span class="s1">Follower follower</span><span class="s2">;</span>
+
+    <span class="s0">private </span><span class="s1">Timer pathTimer</span><span class="s2">, </span><span class="s1">opModeTimer</span><span class="s2">;</span>
+
+<span class="s0">public enum </span><span class="s1">PathState </span><span class="s2">{</span>
+        <span class="s3">// START POSITION_END POSITION</span>
+        <span class="s3">// DRIVE &gt; MOVEMENT STATE</span>
+        <span class="s3">// SHOOT &gt; ATTEMPT TO SCORE</span>
+
+        <span class="s1">DRIVE_STARTPOS_SHOOT_POS</span><span class="s2">,</span>
+
+        <span class="s1">SHOOT_PRELOAD</span>
+<span class="s2">}</span>
+    <span class="s1">PathState pathState</span><span class="s2">;</span>
+
+    <span class="s0">private final </span><span class="s1">Pose startPose </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s4">124.1</span><span class="s2">,</span><span class="s4">122.3</span><span class="s2">,</span><span class="s1">Math</span><span class="s2">.</span><span class="s1">toRadians</span><span class="s2">(</span><span class="s4">37</span><span class="s2">));</span>
+    <span class="s0">private final </span><span class="s1">Pose shootpose </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s4">93</span><span class="s2">,</span><span class="s4">92.5</span><span class="s2">, </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">toRadians</span><span class="s2">(</span><span class="s4">45</span><span class="s2">));</span>
+
+    <span class="s0">private </span><span class="s1">PathChain driveStartStartPosShootPos</span><span class="s2">;</span>
+
+    <span class="s0">public void </span><span class="s1">buildpaths</span><span class="s2">() {</span>
+        <span class="s3">// put in coordinates for starting pose &gt; ending pos</span>
+        <span class="s1">driveStartStartPosShootPos </span><span class="s2">= </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">pathBuilder</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">addPath</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierLine</span><span class="s2">(</span><span class="s1">startPose</span><span class="s2">,</span><span class="s1">shootpose</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">setLinearHeadingInterpolation</span><span class="s2">(</span><span class="s1">startPose</span><span class="s2">.</span><span class="s1">getHeading</span><span class="s2">(), </span><span class="s1">shootpose</span><span class="s2">.</span><span class="s1">getHeading</span><span class="s2">())</span>
+                <span class="s2">.</span><span class="s1">build</span><span class="s2">();</span>
+
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">statepathupdate</span><span class="s2">() {</span>
+        <span class="s0">switch </span><span class="s2">(</span><span class="s1">pathState</span><span class="s2">) {</span>
+            <span class="s0">case </span><span class="s1">DRIVE_STARTPOS_SHOOT_POS</span><span class="s2">:</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">driveStartStartPosShootPos</span><span class="s2">, </span><span class="s0">true</span><span class="s2">);</span>
+                <span class="s1">pathState </span><span class="s2">= </span><span class="s1">pathState</span><span class="s2">.</span><span class="s1">SHOOT_PRELOAD</span><span class="s2">;</span>
+                <span class="s0">break</span><span class="s2">;</span>
+            <span class="s0">case </span><span class="s1">SHOOT_PRELOAD</span><span class="s2">:</span>
+                <span class="s3">// check is follower done it's path?</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">isBusy</span><span class="s2">()) {</span>
+                    <span class="s3">// TODO add logic to flywheel shooter</span>
+                    <span class="s1">telemetry</span><span class="s2">.</span><span class="s1">addLine</span><span class="s2">(</span><span class="s5">&quot;Done Path 1&quot;</span><span class="s2">);</span>
+                    <span class="s3">// transition to next state</span>
+                <span class="s2">}</span>
+                <span class="s0">break</span><span class="s2">;</span>
+            <span class="s0">default</span><span class="s2">:</span>
+                <span class="s1">telemetry</span><span class="s2">.</span><span class="s1">addLine</span><span class="s2">(</span><span class="s5">&quot;No State Commanded&quot;</span><span class="s2">);</span>
+                <span class="s0">break</span><span class="s2">;</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+
+
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+
+    <span class="s2">}</span>
+
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

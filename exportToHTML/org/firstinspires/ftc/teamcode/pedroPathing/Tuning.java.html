@@ -1,0 +1,1383 @@
+<html>
+<head>
+<title>Tuning.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+.s5 { color: #6aab73;}
+.s6 { color: #2aacb8;}
+.s7 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Tuning.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">org</span><span class="s2">.</span><span class="s1">firstinspires</span><span class="s2">.</span><span class="s1">ftc</span><span class="s2">.</span><span class="s1">teamcode</span><span class="s2">.</span><span class="s1">pedroPathing</span><span class="s2">;</span>
+
+<span class="s0">import static </span><span class="s1">org</span><span class="s2">.</span><span class="s1">firstinspires</span><span class="s2">.</span><span class="s1">ftc</span><span class="s2">.</span><span class="s1">teamcode</span><span class="s2">.</span><span class="s1">pedroPathing</span><span class="s2">.</span><span class="s1">Tuning</span><span class="s2">.</span><span class="s1">changes</span><span class="s2">;</span>
+<span class="s0">import static </span><span class="s1">org</span><span class="s2">.</span><span class="s1">firstinspires</span><span class="s2">.</span><span class="s1">ftc</span><span class="s2">.</span><span class="s1">teamcode</span><span class="s2">.</span><span class="s1">pedroPathing</span><span class="s2">.</span><span class="s1">Tuning</span><span class="s2">.</span><span class="s1">drawOnlyCurrent</span><span class="s2">;</span>
+<span class="s0">import static </span><span class="s1">org</span><span class="s2">.</span><span class="s1">firstinspires</span><span class="s2">.</span><span class="s1">ftc</span><span class="s2">.</span><span class="s1">teamcode</span><span class="s2">.</span><span class="s1">pedroPathing</span><span class="s2">.</span><span class="s1">Tuning</span><span class="s2">.</span><span class="s1">draw</span><span class="s2">;</span>
+<span class="s0">import static </span><span class="s1">org</span><span class="s2">.</span><span class="s1">firstinspires</span><span class="s2">.</span><span class="s1">ftc</span><span class="s2">.</span><span class="s1">teamcode</span><span class="s2">.</span><span class="s1">pedroPathing</span><span class="s2">.</span><span class="s1">Tuning</span><span class="s2">.</span><span class="s1">follower</span><span class="s2">;</span>
+<span class="s0">import static </span><span class="s1">org</span><span class="s2">.</span><span class="s1">firstinspires</span><span class="s2">.</span><span class="s1">ftc</span><span class="s2">.</span><span class="s1">teamcode</span><span class="s2">.</span><span class="s1">pedroPathing</span><span class="s2">.</span><span class="s1">Tuning</span><span class="s2">.</span><span class="s1">stopRobot</span><span class="s2">;</span>
+<span class="s0">import static </span><span class="s1">org</span><span class="s2">.</span><span class="s1">firstinspires</span><span class="s2">.</span><span class="s1">ftc</span><span class="s2">.</span><span class="s1">teamcode</span><span class="s2">.</span><span class="s1">pedroPathing</span><span class="s2">.</span><span class="s1">Tuning</span><span class="s2">.</span><span class="s1">telemetryM</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">bylazar</span><span class="s2">.</span><span class="s1">configurables</span><span class="s2">.</span><span class="s1">PanelsConfigurables</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">bylazar</span><span class="s2">.</span><span class="s1">configurables</span><span class="s2">.</span><span class="s1">annotations</span><span class="s2">.</span><span class="s1">Configurable</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">bylazar</span><span class="s2">.</span><span class="s1">configurables</span><span class="s2">.</span><span class="s1">annotations</span><span class="s2">.</span><span class="s1">IgnoreConfigurable</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">bylazar</span><span class="s2">.</span><span class="s1">field</span><span class="s2">.</span><span class="s1">FieldManager</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">bylazar</span><span class="s2">.</span><span class="s1">field</span><span class="s2">.</span><span class="s1">PanelsField</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">bylazar</span><span class="s2">.</span><span class="s1">field</span><span class="s2">.</span><span class="s1">Style</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">bylazar</span><span class="s2">.</span><span class="s1">telemetry</span><span class="s2">.</span><span class="s1">PanelsTelemetry</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">bylazar</span><span class="s2">.</span><span class="s1">telemetry</span><span class="s2">.</span><span class="s1">TelemetryManager</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">pedropathing</span><span class="s2">.</span><span class="s1">ErrorCalculator</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">pedropathing</span><span class="s2">.</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">Follower</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">pedropathing</span><span class="s2">.</span><span class="s1">geometry</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">pedropathing</span><span class="s2">.</span><span class="s1">math</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">pedropathing</span><span class="s2">.</span><span class="s1">paths</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">pedropathing</span><span class="s2">.</span><span class="s1">telemetry</span><span class="s2">.</span><span class="s1">SelectableOpMode</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">pedropathing</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">qualcomm</span><span class="s2">.</span><span class="s1">robotcore</span><span class="s2">.</span><span class="s1">eventloop</span><span class="s2">.</span><span class="s1">opmode</span><span class="s2">.</span><span class="s1">OpMode</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">qualcomm</span><span class="s2">.</span><span class="s1">robotcore</span><span class="s2">.</span><span class="s1">eventloop</span><span class="s2">.</span><span class="s1">opmode</span><span class="s2">.</span><span class="s1">TeleOp</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">ArrayList</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the Tuning class. It contains a selection menu for various tuning OpModes.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Baron Henderson - 20077 The Indubitables</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0, 6/26/2025</span>
+ <span class="s3">*/</span>
+<span class="s1">@Configurable</span>
+<span class="s1">@TeleOp</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s5">&quot;Tuning&quot;</span><span class="s2">, </span><span class="s1">group </span><span class="s2">= </span><span class="s5">&quot;Pedro Pathing&quot;</span><span class="s2">)</span>
+<span class="s0">public class </span><span class="s1">Tuning </span><span class="s0">extends </span><span class="s1">SelectableOpMode </span><span class="s2">{</span>
+    <span class="s0">public static </span><span class="s1">Follower follower</span><span class="s2">;</span>
+
+    <span class="s1">@IgnoreConfigurable</span>
+    <span class="s0">static </span><span class="s1">PoseHistory poseHistory</span><span class="s2">;</span>
+
+    <span class="s1">@IgnoreConfigurable</span>
+    <span class="s0">static </span><span class="s1">TelemetryManager telemetryM</span><span class="s2">;</span>
+
+    <span class="s1">@IgnoreConfigurable</span>
+    <span class="s0">static </span><span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">changes </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+
+    <span class="s0">public </span><span class="s1">Tuning</span><span class="s2">() {</span>
+        <span class="s0">super</span><span class="s2">(</span><span class="s5">&quot;Select a Tuning OpMode&quot;</span><span class="s2">, </span><span class="s1">s -&gt; </span><span class="s2">{</span>
+            <span class="s1">s</span><span class="s2">.</span><span class="s1">folder</span><span class="s2">(</span><span class="s5">&quot;Localization&quot;</span><span class="s2">, </span><span class="s1">l -&gt; </span><span class="s2">{</span>
+                <span class="s1">l</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Localization Test&quot;</span><span class="s2">, </span><span class="s1">LocalizationTest::</span><span class="s0">new</span><span class="s2">);</span>
+                <span class="s1">l</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Forward Tuner&quot;</span><span class="s2">, </span><span class="s1">ForwardTuner::</span><span class="s0">new</span><span class="s2">);</span>
+                <span class="s1">l</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Lateral Tuner&quot;</span><span class="s2">, </span><span class="s1">LateralTuner::</span><span class="s0">new</span><span class="s2">);</span>
+                <span class="s1">l</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Turn Tuner&quot;</span><span class="s2">, </span><span class="s1">TurnTuner::</span><span class="s0">new</span><span class="s2">);</span>
+            <span class="s2">});</span>
+            <span class="s1">s</span><span class="s2">.</span><span class="s1">folder</span><span class="s2">(</span><span class="s5">&quot;Automatic&quot;</span><span class="s2">, </span><span class="s1">a -&gt; </span><span class="s2">{</span>
+                <span class="s1">a</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Forward Velocity Tuner&quot;</span><span class="s2">, </span><span class="s1">ForwardVelocityTuner::</span><span class="s0">new</span><span class="s2">);</span>
+                <span class="s1">a</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Lateral Velocity Tuner&quot;</span><span class="s2">, </span><span class="s1">LateralVelocityTuner::</span><span class="s0">new</span><span class="s2">);</span>
+                <span class="s1">a</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Forward Zero Power Acceleration Tuner&quot;</span><span class="s2">, </span><span class="s1">ForwardZeroPowerAccelerationTuner::</span><span class="s0">new</span><span class="s2">);</span>
+                <span class="s1">a</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Lateral Zero Power Acceleration Tuner&quot;</span><span class="s2">, </span><span class="s1">LateralZeroPowerAccelerationTuner::</span><span class="s0">new</span><span class="s2">);</span>
+            <span class="s2">});</span>
+            <span class="s1">s</span><span class="s2">.</span><span class="s1">folder</span><span class="s2">(</span><span class="s5">&quot;Manual&quot;</span><span class="s2">, </span><span class="s1">p -&gt; </span><span class="s2">{</span>
+                <span class="s1">p</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Translational Tuner&quot;</span><span class="s2">, </span><span class="s1">TranslationalTuner::</span><span class="s0">new</span><span class="s2">);</span>
+                <span class="s1">p</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Heading Tuner&quot;</span><span class="s2">, </span><span class="s1">HeadingTuner::</span><span class="s0">new</span><span class="s2">);</span>
+                <span class="s1">p</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Drive Tuner&quot;</span><span class="s2">, </span><span class="s1">DriveTuner::</span><span class="s0">new</span><span class="s2">);</span>
+                <span class="s1">p</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Line Tuner&quot;</span><span class="s2">, </span><span class="s1">Line::</span><span class="s0">new</span><span class="s2">);</span>
+                <span class="s1">p</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Centripetal Tuner&quot;</span><span class="s2">, </span><span class="s1">CentripetalTuner::</span><span class="s0">new</span><span class="s2">);</span>
+            <span class="s2">});</span>
+            <span class="s1">s</span><span class="s2">.</span><span class="s1">folder</span><span class="s2">(</span><span class="s5">&quot;Tests&quot;</span><span class="s2">, </span><span class="s1">p -&gt; </span><span class="s2">{</span>
+                <span class="s1">p</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Line&quot;</span><span class="s2">, </span><span class="s1">Line::</span><span class="s0">new</span><span class="s2">);</span>
+                <span class="s1">p</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Triangle&quot;</span><span class="s2">, </span><span class="s1">Triangle::</span><span class="s0">new</span><span class="s2">);</span>
+                <span class="s1">p</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s5">&quot;Circle&quot;</span><span class="s2">, </span><span class="s1">Circle::</span><span class="s0">new</span><span class="s2">);</span>
+            <span class="s2">});</span>
+        <span class="s2">});</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">onSelect</span><span class="s2">() {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">follower </span><span class="s2">== </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s1">follower </span><span class="s2">= </span><span class="s1">Constants</span><span class="s2">.</span><span class="s1">createFollower</span><span class="s2">(</span><span class="s1">hardwareMap</span><span class="s2">);</span>
+            <span class="s1">PanelsConfigurables</span><span class="s2">.</span><span class="s1">INSTANCE</span><span class="s2">.</span><span class="s1">refreshClass</span><span class="s2">(</span><span class="s0">this</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">follower </span><span class="s2">= </span><span class="s1">Constants</span><span class="s2">.</span><span class="s1">createFollower</span><span class="s2">(</span><span class="s1">hardwareMap</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">());</span>
+
+        <span class="s1">poseHistory </span><span class="s2">= </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPoseHistory</span><span class="s2">();</span>
+
+        <span class="s1">telemetryM </span><span class="s2">= </span><span class="s1">PanelsTelemetry</span><span class="s2">.</span><span class="s1">INSTANCE</span><span class="s2">.</span><span class="s1">getTelemetry</span><span class="s2">();</span>
+
+        <span class="s1">Drawing</span><span class="s2">.</span><span class="s1">init</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">onLog</span><span class="s2">(</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">lines</span><span class="s2">) {}</span>
+
+    <span class="s0">public static void </span><span class="s1">drawOnlyCurrent</span><span class="s2">() {</span>
+        <span class="s0">try </span><span class="s2">{</span>
+            <span class="s1">Drawing</span><span class="s2">.</span><span class="s1">drawRobot</span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPose</span><span class="s2">());</span>
+            <span class="s1">Drawing</span><span class="s2">.</span><span class="s1">sendPacket</span><span class="s2">();</span>
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">Exception e</span><span class="s2">) {</span>
+            <span class="s0">throw new </span><span class="s1">RuntimeException</span><span class="s2">(</span><span class="s5">&quot;Drawing failed &quot; </span><span class="s2">+ </span><span class="s1">e</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public static void </span><span class="s1">draw</span><span class="s2">() {</span>
+        <span class="s1">Drawing</span><span class="s2">.</span><span class="s1">drawDebug</span><span class="s2">(</span><span class="s1">follower</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This creates a full stop of the robot by setting the drive motors to run at 0 power. */</span>
+    <span class="s0">public static void </span><span class="s1">stopRobot</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">startTeleopDrive</span><span class="s2">(</span><span class="s0">true</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setTeleOpDrive</span><span class="s2">(</span><span class="s6">0</span><span class="s2">,</span><span class="s6">0</span><span class="s2">,</span><span class="s6">0</span><span class="s2">,</span><span class="s0">true</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the LocalizationTest OpMode. This is basically just a simple mecanum drive attached to a</span>
+ <span class="s3">* PoseUpdater. The OpMode will print out the robot's pose to telemetry as well as draw the robot.</span>
+ <span class="s3">* You should use this to check the robot's localization.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Anyi Lin - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Baron Henderson - 20077 The Indubitables</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0, 5/6/2024</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">LocalizationTest </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This initializes the PoseUpdater, the mecanum drive motors, and the Panels telemetry. */</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init_loop</span><span class="s2">() {</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;This will print your robot's position to telemetry while &quot;</span>
+                <span class="s2">+ </span><span class="s5">&quot;allowing robot control through a basic mecanum drive on gamepad 1.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">start</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">startTeleopDrive</span><span class="s2">();</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This updates the robot's pose estimate, the simple mecanum drive, and updates the</span>
+     <span class="s3">* Panels telemetry with the robot's position as well as draws the robot's position.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setTeleOpDrive</span><span class="s2">(-</span><span class="s1">gamepad1</span><span class="s2">.</span><span class="s1">left_stick_y</span><span class="s2">, -</span><span class="s1">gamepad1</span><span class="s2">.</span><span class="s1">left_stick_x</span><span class="s2">, -</span><span class="s1">gamepad1</span><span class="s2">.</span><span class="s1">right_stick_x</span><span class="s2">, </span><span class="s0">true</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;x:&quot; </span><span class="s2">+ </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPose</span><span class="s2">().</span><span class="s1">getX</span><span class="s2">());</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;y:&quot; </span><span class="s2">+ </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPose</span><span class="s2">().</span><span class="s1">getY</span><span class="s2">());</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;heading:&quot; </span><span class="s2">+ </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPose</span><span class="s2">().</span><span class="s1">getHeading</span><span class="s2">());</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;total heading:&quot; </span><span class="s2">+ </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getTotalHeading</span><span class="s2">());</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+
+        <span class="s1">draw</span><span class="s2">();</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the ForwardTuner OpMode. This tracks the forward movement of the robot and displays the</span>
+ <span class="s3">* necessary ticks to inches multiplier. This displayed multiplier is what's necessary to scale the</span>
+ <span class="s3">* robot's current distance in ticks to the specified distance in inches. So, to use this, run the</span>
+ <span class="s3">* tuner, then pull/push the robot to the specified distance using a ruler on the ground. When you're</span>
+ <span class="s3">* at the end of the distance, record the ticks to inches multiplier. Feel free to run multiple trials</span>
+ <span class="s3">* and average the results. Then, input the multiplier into the forward ticks to inches in your</span>
+ <span class="s3">* localizer of choice.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Anyi Lin - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Baron Henderson - 20077 The Indubitables</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0, 5/6/2024</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">ForwardTuner </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+    <span class="s0">public static double </span><span class="s1">DISTANCE </span><span class="s2">= </span><span class="s6">48</span><span class="s2">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">));</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This initializes the PoseUpdater as well as the Panels telemetry. */</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init_loop</span><span class="s2">() {</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Pull your robot forward &quot; </span><span class="s2">+ </span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s5">&quot; inches. Your forward ticks to inches will be shown on the telemetry.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This updates the robot's pose estimate, and updates the Panels telemetry with the</span>
+     <span class="s3">* calculated multiplier and draws the robot.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Distance Moved: &quot; </span><span class="s2">+ (</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPose</span><span class="s2">().</span><span class="s1">getX</span><span class="s2">() - </span><span class="s6">72</span><span class="s2">));</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;The multiplier will display what your forward ticks to inches should be to scale your current distance to &quot; </span><span class="s2">+ </span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s5">&quot; inches.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Multiplier: &quot; </span><span class="s2">+ (</span><span class="s1">DISTANCE </span><span class="s2">/ ((</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPose</span><span class="s2">().</span><span class="s1">getX</span><span class="s2">() - </span><span class="s6">72</span><span class="s2">) / </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPoseTracker</span><span class="s2">().</span><span class="s1">getLocalizer</span><span class="s2">().</span><span class="s1">getForwardMultiplier</span><span class="s2">())));</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+
+        <span class="s1">draw</span><span class="s2">();</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the LateralTuner OpMode. This tracks the strafe movement of the robot and displays the</span>
+ <span class="s3">* necessary ticks to inches multiplier. This displayed multiplier is what's necessary to scale the</span>
+ <span class="s3">* robot's current distance in ticks to the specified distance in inches. So, to use this, run the</span>
+ <span class="s3">* tuner, then pull/push the robot to the specified distance using a ruler on the ground. When you're</span>
+ <span class="s3">* at the end of the distance, record the ticks to inches multiplier. Feel free to run multiple trials</span>
+ <span class="s3">* and average the results. Then, input the multiplier into the strafe ticks to inches in your</span>
+ <span class="s3">* localizer of choice.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Anyi Lin - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Baron Henderson - 20077 The Indubitables</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">2.0, 6/26/2025</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">LateralTuner </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+    <span class="s0">public static double </span><span class="s1">DISTANCE </span><span class="s2">= </span><span class="s6">48</span><span class="s2">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">));</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This initializes the PoseUpdater as well as the Panels telemetry. */</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init_loop</span><span class="s2">() {</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Pull your robot to the right &quot; </span><span class="s2">+ </span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s5">&quot; inches. Your strafe ticks to inches will be shown on the telemetry.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This updates the robot's pose estimate, and updates the Panels telemetry with the</span>
+     <span class="s3">* calculated multiplier and draws the robot.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Distance Moved: &quot; </span><span class="s2">+ (</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPose</span><span class="s2">().</span><span class="s1">getY</span><span class="s2">() - </span><span class="s6">72</span><span class="s2">));</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;The multiplier will display what your strafe ticks to inches should be to scale your current distance to &quot; </span><span class="s2">+ </span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s5">&quot; inches.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Multiplier: &quot; </span><span class="s2">+ (</span><span class="s1">DISTANCE </span><span class="s2">/ ((</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPose</span><span class="s2">().</span><span class="s1">getY</span><span class="s2">() - </span><span class="s6">72</span><span class="s2">) / </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPoseTracker</span><span class="s2">().</span><span class="s1">getLocalizer</span><span class="s2">().</span><span class="s1">getLateralMultiplier</span><span class="s2">())));</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+
+        <span class="s1">draw</span><span class="s2">();</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the TurnTuner OpMode. This tracks the turning movement of the robot and displays the</span>
+ <span class="s3">* necessary ticks to inches multiplier. This displayed multiplier is what's necessary to scale the</span>
+ <span class="s3">* robot's current angle in ticks to the specified angle in radians. So, to use this, run the</span>
+ <span class="s3">* tuner, then pull/push the robot to the specified angle using a protractor or lines on the ground.</span>
+ <span class="s3">* When you're at the end of the angle, record the ticks to inches multiplier. Feel free to run</span>
+ <span class="s3">* multiple trials and average the results. Then, input the multiplier into the turning ticks to</span>
+ <span class="s3">* radians in your localizer of choice.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Anyi Lin - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Baron Henderson - 20077 The Indubitables</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0, 5/6/2024</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">TurnTuner </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+    <span class="s0">public static double </span><span class="s1">ANGLE </span><span class="s2">= </span><span class="s6">2 </span><span class="s2">* </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">PI</span><span class="s2">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">));</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This initializes the PoseUpdater as well as the Panels telemetry. */</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init_loop</span><span class="s2">() {</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Turn your robot &quot; </span><span class="s2">+ </span><span class="s1">ANGLE </span><span class="s2">+ </span><span class="s5">&quot; radians. Your turn ticks to inches will be shown on the telemetry.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This updates the robot's pose estimate, and updates the Panels telemetry with the</span>
+     <span class="s3">* calculated multiplier and draws the robot.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Total Angle: &quot; </span><span class="s2">+ </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getTotalHeading</span><span class="s2">());</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;The multiplier will display what your turn ticks to inches should be to scale your current angle to &quot; </span><span class="s2">+ </span><span class="s1">ANGLE </span><span class="s2">+ </span><span class="s5">&quot; radians.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Multiplier: &quot; </span><span class="s2">+ (</span><span class="s1">ANGLE </span><span class="s2">/ (</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getTotalHeading</span><span class="s2">() / </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPoseTracker</span><span class="s2">().</span><span class="s1">getLocalizer</span><span class="s2">().</span><span class="s1">getTurningMultiplier</span><span class="s2">())));</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+
+        <span class="s1">draw</span><span class="s2">();</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the ForwardVelocityTuner autonomous follower OpMode. This runs the robot forwards at max</span>
+ <span class="s3">* power until it reaches some specified distance. It records the most recent velocities, and on</span>
+ <span class="s3">* reaching the end of the distance, it averages them and prints out the velocity obtained. It is</span>
+ <span class="s3">* recommended to run this multiple times on a full battery to get the best results. What this does</span>
+ <span class="s3">* is, when paired with StrafeVelocityTuner, allows FollowerConstants to create a Vector that</span>
+ <span class="s3">* empirically represents the direction your mecanum wheels actually prefer to go in, allowing for</span>
+ <span class="s3">* more accurate following.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Anyi Lin - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Aaron Yang - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Harrison Womack - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Baron Henderson - 20077 The Indubitables</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0, 3/13/2024</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">ForwardVelocityTuner </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+    <span class="s0">private final </span><span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Double</span><span class="s2">&gt; </span><span class="s1">velocities </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+    <span class="s0">public static double </span><span class="s1">DISTANCE </span><span class="s2">= </span><span class="s6">48</span><span class="s2">;</span>
+    <span class="s0">public static double </span><span class="s1">RECORD_NUMBER </span><span class="s2">= </span><span class="s6">10</span><span class="s2">;</span>
+
+    <span class="s0">private boolean </span><span class="s1">end</span><span class="s2">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This initializes the drive motors as well as the cache of velocities and the Panels telemetry. */</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init_loop</span><span class="s2">() {</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;The robot will run at 1 power until it reaches &quot; </span><span class="s2">+ </span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s5">&quot; inches forward.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Make sure you have enough room, since the robot has inertia after cutting power.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;After running the distance, the robot will cut power from the drivetrain and display the forward velocity.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Press B on game pad 1 to stop.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;pose&quot;</span><span class="s2">, </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPose</span><span class="s2">());</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This starts the OpMode by setting the drive motors to run forward at full power. */</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">start</span><span class="s2">() {</span>
+        <span class="s0">for </span><span class="s2">(</span><span class="s0">int </span><span class="s1">i </span><span class="s2">= </span><span class="s6">0</span><span class="s2">; </span><span class="s1">i </span><span class="s2">&lt; </span><span class="s1">RECORD_NUMBER</span><span class="s2">; </span><span class="s1">i</span><span class="s2">++) {</span>
+            <span class="s1">velocities</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s6">0.0</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">startTeleopDrive</span><span class="s2">(</span><span class="s0">true</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">end </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This runs the OpMode. At any point during the running of the OpMode, pressing B on</span>
+     <span class="s3">* game pad 1 will stop the OpMode. This continuously records the RECORD_NUMBER most recent</span>
+     <span class="s3">* velocities, and when the robot has run forward enough, these last velocities recorded are</span>
+     <span class="s3">* averaged and printed.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">gamepad1</span><span class="s2">.</span><span class="s1">bWasPressed</span><span class="s2">()) {</span>
+            <span class="s1">stopRobot</span><span class="s2">();</span>
+            <span class="s1">requestOpModeStop</span><span class="s2">();</span>
+        <span class="s2">}</span>
+
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">draw</span><span class="s2">();</span>
+
+
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">end</span><span class="s2">) {</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">Math</span><span class="s2">.</span><span class="s1">abs</span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPose</span><span class="s2">().</span><span class="s1">getX</span><span class="s2">()) &gt; (</span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">)) {</span>
+                <span class="s1">end </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+                <span class="s1">stopRobot</span><span class="s2">();</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">setTeleOpDrive</span><span class="s2">(</span><span class="s6">1</span><span class="s2">,</span><span class="s6">0</span><span class="s2">,</span><span class="s6">0</span><span class="s2">,</span><span class="s0">true</span><span class="s2">);</span>
+                <span class="s7">//double currentVelocity = Math.abs(follower.getVelocity().getXComponent());</span>
+                <span class="s0">double </span><span class="s1">currentVelocity </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">abs</span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">poseTracker</span><span class="s2">.</span><span class="s1">getLocalizer</span><span class="s2">().</span><span class="s1">getVelocity</span><span class="s2">().</span><span class="s1">getX</span><span class="s2">());</span>
+                <span class="s1">velocities</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">currentVelocity</span><span class="s2">);</span>
+                <span class="s1">velocities</span><span class="s2">.</span><span class="s1">remove</span><span class="s2">(</span><span class="s6">0</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">stopRobot</span><span class="s2">();</span>
+            <span class="s0">double </span><span class="s1">average </span><span class="s2">= </span><span class="s6">0</span><span class="s2">;</span>
+            <span class="s0">for </span><span class="s2">(</span><span class="s0">double </span><span class="s1">velocity </span><span class="s2">: </span><span class="s1">velocities</span><span class="s2">) {</span>
+                <span class="s1">average </span><span class="s2">+= </span><span class="s1">velocity</span><span class="s2">;</span>
+            <span class="s2">}</span>
+            <span class="s1">average </span><span class="s2">/= </span><span class="s1">velocities</span><span class="s2">.</span><span class="s1">size</span><span class="s2">();</span>
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Forward Velocity: &quot; </span><span class="s2">+ </span><span class="s1">average</span><span class="s2">);</span>
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;</span><span class="s0">\n</span><span class="s5">&quot;</span><span class="s2">);</span>
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Press A to set the Forward Velocity temporarily (while robot remains on).&quot;</span><span class="s2">);</span>
+
+            <span class="s0">for </span><span class="s2">(</span><span class="s0">int </span><span class="s1">i </span><span class="s2">= </span><span class="s6">0</span><span class="s2">; </span><span class="s1">i </span><span class="s2">&lt; </span><span class="s1">velocities</span><span class="s2">.</span><span class="s1">size</span><span class="s2">(); </span><span class="s1">i</span><span class="s2">++) {</span>
+                <span class="s1">telemetry</span><span class="s2">.</span><span class="s1">addData</span><span class="s2">(</span><span class="s1">String</span><span class="s2">.</span><span class="s1">valueOf</span><span class="s2">(</span><span class="s1">i</span><span class="s2">), </span><span class="s1">velocities</span><span class="s2">.</span><span class="s1">get</span><span class="s2">(</span><span class="s1">i</span><span class="s2">));</span>
+            <span class="s2">}</span>
+
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+            <span class="s1">telemetry</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">gamepad1</span><span class="s2">.</span><span class="s1">aWasPressed</span><span class="s2">()) {</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">setXVelocity</span><span class="s2">(</span><span class="s1">average</span><span class="s2">);</span>
+                <span class="s1">String message </span><span class="s2">= </span><span class="s5">&quot;XMovement: &quot; </span><span class="s2">+ </span><span class="s1">average</span><span class="s2">;</span>
+                <span class="s1">changes</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">message</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the StrafeVelocityTuner autonomous follower OpMode. This runs the robot left at max</span>
+ <span class="s3">* power until it reaches some specified distance. It records the most recent velocities, and on</span>
+ <span class="s3">* reaching the end of the distance, it averages them and prints out the velocity obtained. It is</span>
+ <span class="s3">* recommended to run this multiple times on a full battery to get the best results. What this does</span>
+ <span class="s3">* is, when paired with ForwardVelocityTuner, allows FollowerConstants to create a Vector that</span>
+ <span class="s3">* empirically represents the direction your mecanum wheels actually prefer to go in, allowing for</span>
+ <span class="s3">* more accurate following.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Anyi Lin - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Aaron Yang - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Harrison Womack - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Baron Henderson - 20077 The Indubitables</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0, 3/13/2024</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">LateralVelocityTuner </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+    <span class="s0">private final </span><span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Double</span><span class="s2">&gt; </span><span class="s1">velocities </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+
+    <span class="s0">public static double </span><span class="s1">DISTANCE </span><span class="s2">= </span><span class="s6">48</span><span class="s2">;</span>
+    <span class="s0">public static double </span><span class="s1">RECORD_NUMBER </span><span class="s2">= </span><span class="s6">10</span><span class="s2">;</span>
+
+    <span class="s0">private boolean </span><span class="s1">end</span><span class="s2">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This initializes the drive motors as well as the cache of velocities and the Panels</span>
+     <span class="s3">* telemetryM.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init_loop</span><span class="s2">() {</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;The robot will run at 1 power until it reaches &quot; </span><span class="s2">+ </span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s5">&quot; inches to the left.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Make sure you have enough room, since the robot has inertia after cutting power.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;After running the distance, the robot will cut power from the drivetrain and display the strafe velocity.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Press B on Gamepad 1 to stop.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This starts the OpMode by setting the drive motors to run left at full power. */</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">start</span><span class="s2">() {</span>
+        <span class="s0">for </span><span class="s2">(</span><span class="s0">int </span><span class="s1">i </span><span class="s2">= </span><span class="s6">0</span><span class="s2">; </span><span class="s1">i </span><span class="s2">&lt; </span><span class="s1">RECORD_NUMBER</span><span class="s2">; </span><span class="s1">i</span><span class="s2">++) {</span>
+            <span class="s1">velocities</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s6">0.0</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">startTeleopDrive</span><span class="s2">(</span><span class="s0">true</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This runs the OpMode. At any point during the running of the OpMode, pressing B on</span>
+     <span class="s3">* game pad1 will stop the OpMode. This continuously records the RECORD_NUMBER most recent</span>
+     <span class="s3">* velocities, and when the robot has run sideways enough, these last velocities recorded are</span>
+     <span class="s3">* averaged and printed.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">gamepad1</span><span class="s2">.</span><span class="s1">bWasPressed</span><span class="s2">()) {</span>
+            <span class="s1">stopRobot</span><span class="s2">();</span>
+            <span class="s1">requestOpModeStop</span><span class="s2">();</span>
+        <span class="s2">}</span>
+
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">draw</span><span class="s2">();</span>
+
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">end</span><span class="s2">) {</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">Math</span><span class="s2">.</span><span class="s1">abs</span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPose</span><span class="s2">().</span><span class="s1">getY</span><span class="s2">()) &gt; (</span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">)) {</span>
+                <span class="s1">end </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+                <span class="s1">stopRobot</span><span class="s2">();</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">setTeleOpDrive</span><span class="s2">(</span><span class="s6">0</span><span class="s2">,</span><span class="s6">1</span><span class="s2">,</span><span class="s6">0</span><span class="s2">,</span><span class="s0">true</span><span class="s2">);</span>
+                <span class="s0">double </span><span class="s1">currentVelocity </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">abs</span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getVelocity</span><span class="s2">().</span><span class="s1">dot</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Vector</span><span class="s2">(</span><span class="s6">1</span><span class="s2">, </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">PI </span><span class="s2">/ </span><span class="s6">2</span><span class="s2">)));</span>
+                <span class="s1">velocities</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">currentVelocity</span><span class="s2">);</span>
+                <span class="s1">velocities</span><span class="s2">.</span><span class="s1">remove</span><span class="s2">(</span><span class="s6">0</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">stopRobot</span><span class="s2">();</span>
+            <span class="s0">double </span><span class="s1">average </span><span class="s2">= </span><span class="s6">0</span><span class="s2">;</span>
+            <span class="s0">for </span><span class="s2">(</span><span class="s0">double </span><span class="s1">velocity </span><span class="s2">: </span><span class="s1">velocities</span><span class="s2">) {</span>
+                <span class="s1">average </span><span class="s2">+= </span><span class="s1">velocity</span><span class="s2">;</span>
+            <span class="s2">}</span>
+            <span class="s1">average </span><span class="s2">/= </span><span class="s1">velocities</span><span class="s2">.</span><span class="s1">size</span><span class="s2">();</span>
+
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Strafe Velocity: &quot; </span><span class="s2">+ </span><span class="s1">average</span><span class="s2">);</span>
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;</span><span class="s0">\n</span><span class="s5">&quot;</span><span class="s2">);</span>
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Press A to set the Lateral Velocity temporarily (while robot remains on).&quot;</span><span class="s2">);</span>
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">gamepad1</span><span class="s2">.</span><span class="s1">aWasPressed</span><span class="s2">()) {</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">setYVelocity</span><span class="s2">(</span><span class="s1">average</span><span class="s2">);</span>
+                <span class="s1">String message </span><span class="s2">= </span><span class="s5">&quot;YMovement: &quot; </span><span class="s2">+ </span><span class="s1">average</span><span class="s2">;</span>
+                <span class="s1">changes</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">message</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the ForwardZeroPowerAccelerationTuner autonomous follower OpMode. This runs the robot</span>
+ <span class="s3">* forward until a specified velocity is achieved. Then, the robot cuts power to the motors, setting</span>
+ <span class="s3">* them to zero power. The deceleration, or negative acceleration, is then measured until the robot</span>
+ <span class="s3">* stops. The accelerations across the entire time the robot is slowing down is then averaged and</span>
+ <span class="s3">* that number is then printed. This is used to determine how the robot will decelerate in the</span>
+ <span class="s3">* forward direction when power is cut, making the estimations used in the calculations for the</span>
+ <span class="s3">* drive Vector more accurate and giving better braking at the end of Paths.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Anyi Lin - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Baron Henderson - 20077 The Indubitables</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Aaron Yang - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Harrison Womack - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0, 3/13/2024</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">ForwardZeroPowerAccelerationTuner </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+    <span class="s0">private final </span><span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Double</span><span class="s2">&gt; </span><span class="s1">accelerations </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+    <span class="s0">public static double </span><span class="s1">VELOCITY </span><span class="s2">= </span><span class="s6">30</span><span class="s2">;</span>
+
+    <span class="s0">private double </span><span class="s1">previousVelocity</span><span class="s2">;</span>
+    <span class="s0">private long </span><span class="s1">previousTimeNano</span><span class="s2">;</span>
+
+    <span class="s0">private boolean </span><span class="s1">stopping</span><span class="s2">;</span>
+    <span class="s0">private boolean </span><span class="s1">end</span><span class="s2">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This initializes the drive motors as well as the Panels telemetryM. */</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init_loop</span><span class="s2">() {</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;The robot will run forward until it reaches &quot; </span><span class="s2">+ </span><span class="s1">VELOCITY </span><span class="s2">+ </span><span class="s5">&quot; inches per second.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Then, it will cut power from the drivetrain and roll to a stop.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Make sure you have enough room.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;After stopping, the forward zero power acceleration (natural deceleration) will be displayed.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Press B on Gamepad 1 to stop.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This starts the OpMode by setting the drive motors to run forward at full power. */</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">start</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">startTeleopDrive</span><span class="s2">(</span><span class="s0">false</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setTeleOpDrive</span><span class="s2">(</span><span class="s6">1</span><span class="s2">,</span><span class="s6">0</span><span class="s2">,</span><span class="s6">0</span><span class="s2">,</span><span class="s0">true</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This runs the OpMode. At any point during the running of the OpMode, pressing B on</span>
+     <span class="s3">* game pad 1 will stop the OpMode. When the robot hits the specified velocity, the robot will</span>
+     <span class="s3">* record its deceleration / negative acceleration until it stops. Then, it will average all the</span>
+     <span class="s3">* recorded deceleration / negative acceleration and print that value.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">gamepad1</span><span class="s2">.</span><span class="s1">bWasPressed</span><span class="s2">()) {</span>
+            <span class="s1">stopRobot</span><span class="s2">();</span>
+            <span class="s1">requestOpModeStop</span><span class="s2">();</span>
+        <span class="s2">}</span>
+
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">draw</span><span class="s2">();</span>
+
+        <span class="s1">Vector heading </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Vector</span><span class="s2">(</span><span class="s6">1.0</span><span class="s2">, </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPose</span><span class="s2">().</span><span class="s1">getHeading</span><span class="s2">());</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">end</span><span class="s2">) {</span>
+            <span class="s0">if </span><span class="s2">(!</span><span class="s1">stopping</span><span class="s2">) {</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getVelocity</span><span class="s2">().</span><span class="s1">dot</span><span class="s2">(</span><span class="s1">heading</span><span class="s2">) &gt; </span><span class="s1">VELOCITY</span><span class="s2">) {</span>
+                    <span class="s1">previousVelocity </span><span class="s2">= </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getVelocity</span><span class="s2">().</span><span class="s1">dot</span><span class="s2">(</span><span class="s1">heading</span><span class="s2">);</span>
+                    <span class="s1">previousTimeNano </span><span class="s2">= </span><span class="s1">System</span><span class="s2">.</span><span class="s1">nanoTime</span><span class="s2">();</span>
+                    <span class="s1">stopping </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+                    <span class="s1">follower</span><span class="s2">.</span><span class="s1">setTeleOpDrive</span><span class="s2">(</span><span class="s6">0</span><span class="s2">,</span><span class="s6">0</span><span class="s2">,</span><span class="s6">0</span><span class="s2">,</span><span class="s0">true</span><span class="s2">);</span>
+                <span class="s2">}</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s0">double </span><span class="s1">currentVelocity </span><span class="s2">= </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getVelocity</span><span class="s2">().</span><span class="s1">dot</span><span class="s2">(</span><span class="s1">heading</span><span class="s2">);</span>
+                <span class="s1">accelerations</span><span class="s2">.</span><span class="s1">add</span><span class="s2">((</span><span class="s1">currentVelocity </span><span class="s2">- </span><span class="s1">previousVelocity</span><span class="s2">) / ((</span><span class="s1">System</span><span class="s2">.</span><span class="s1">nanoTime</span><span class="s2">() - </span><span class="s1">previousTimeNano</span><span class="s2">) / </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">pow</span><span class="s2">(</span><span class="s6">10.0</span><span class="s2">, </span><span class="s6">9</span><span class="s2">)));</span>
+                <span class="s1">previousVelocity </span><span class="s2">= </span><span class="s1">currentVelocity</span><span class="s2">;</span>
+                <span class="s1">previousTimeNano </span><span class="s2">= </span><span class="s1">System</span><span class="s2">.</span><span class="s1">nanoTime</span><span class="s2">();</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">currentVelocity </span><span class="s2">&lt; </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getConstraints</span><span class="s2">().</span><span class="s1">getVelocityConstraint</span><span class="s2">()) {</span>
+                    <span class="s1">end </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+                <span class="s2">}</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s0">double </span><span class="s1">average </span><span class="s2">= </span><span class="s6">0</span><span class="s2">;</span>
+            <span class="s0">for </span><span class="s2">(</span><span class="s0">double </span><span class="s1">acceleration </span><span class="s2">: </span><span class="s1">accelerations</span><span class="s2">) {</span>
+                <span class="s1">average </span><span class="s2">+= </span><span class="s1">acceleration</span><span class="s2">;</span>
+            <span class="s2">}</span>
+            <span class="s1">average </span><span class="s2">/= </span><span class="s1">accelerations</span><span class="s2">.</span><span class="s1">size</span><span class="s2">();</span>
+
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Forward Zero Power Acceleration (Deceleration): &quot; </span><span class="s2">+ </span><span class="s1">average</span><span class="s2">);</span>
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;</span><span class="s0">\n</span><span class="s5">&quot;</span><span class="s2">);</span>
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Press A to set the Forward Zero Power Acceleration temporarily (while robot remains on).&quot;</span><span class="s2">);</span>
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">gamepad1</span><span class="s2">.</span><span class="s1">aWasPressed</span><span class="s2">()) {</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">getConstants</span><span class="s2">().</span><span class="s1">setForwardZeroPowerAcceleration</span><span class="s2">(</span><span class="s1">average</span><span class="s2">);</span>
+                <span class="s1">String message </span><span class="s2">= </span><span class="s5">&quot;Forward Zero Power Acceleration: &quot; </span><span class="s2">+ </span><span class="s1">average</span><span class="s2">;</span>
+                <span class="s1">changes</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">message</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the LateralZeroPowerAccelerationTuner autonomous follower OpMode. This runs the robot</span>
+ <span class="s3">* to the left until a specified velocity is achieved. Then, the robot cuts power to the motors, setting</span>
+ <span class="s3">* them to zero power. The deceleration, or negative acceleration, is then measured until the robot</span>
+ <span class="s3">* stops. The accelerations across the entire time the robot is slowing down is then averaged and</span>
+ <span class="s3">* that number is then printed. This is used to determine how the robot will decelerate in the</span>
+ <span class="s3">* forward direction when power is cut, making the estimations used in the calculations for the</span>
+ <span class="s3">* drive Vector more accurate and giving better braking at the end of Paths.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Anyi Lin - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Aaron Yang - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Harrison Womack - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Baron Henderson - 20077 The Indubitables</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0, 3/13/2024</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">LateralZeroPowerAccelerationTuner </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+    <span class="s0">private final </span><span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Double</span><span class="s2">&gt; </span><span class="s1">accelerations </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+    <span class="s0">public static double </span><span class="s1">VELOCITY </span><span class="s2">= </span><span class="s6">30</span><span class="s2">;</span>
+    <span class="s0">private double </span><span class="s1">previousVelocity</span><span class="s2">;</span>
+    <span class="s0">private long </span><span class="s1">previousTimeNano</span><span class="s2">;</span>
+    <span class="s0">private boolean </span><span class="s1">stopping</span><span class="s2">;</span>
+    <span class="s0">private boolean </span><span class="s1">end</span><span class="s2">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This initializes the drive motors as well as the Panels telemetry. */</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init_loop</span><span class="s2">() {</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;The robot will run to the left until it reaches &quot; </span><span class="s2">+ </span><span class="s1">VELOCITY </span><span class="s2">+ </span><span class="s5">&quot; inches per second.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Then, it will cut power from the drivetrain and roll to a stop.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Make sure you have enough room.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;After stopping, the lateral zero power acceleration (natural deceleration) will be displayed.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Press B on game pad 1 to stop.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This starts the OpMode by setting the drive motors to run forward at full power. */</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">start</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">startTeleopDrive</span><span class="s2">(</span><span class="s0">false</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setTeleOpDrive</span><span class="s2">(</span><span class="s6">0</span><span class="s2">,</span><span class="s6">1</span><span class="s2">,</span><span class="s6">0</span><span class="s2">,</span><span class="s0">true</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This runs the OpMode. At any point during the running of the OpMode, pressing B on</span>
+     <span class="s3">* game pad 1 will stop the OpMode. When the robot hits the specified velocity, the robot will</span>
+     <span class="s3">* record its deceleration / negative acceleration until it stops. Then, it will average all the</span>
+     <span class="s3">* recorded deceleration / negative acceleration and print that value.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">gamepad1</span><span class="s2">.</span><span class="s1">bWasPressed</span><span class="s2">()) {</span>
+            <span class="s1">stopRobot</span><span class="s2">();</span>
+            <span class="s1">requestOpModeStop</span><span class="s2">();</span>
+        <span class="s2">}</span>
+
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">draw</span><span class="s2">();</span>
+
+        <span class="s1">Vector heading </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Vector</span><span class="s2">(</span><span class="s6">1.0</span><span class="s2">, </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPose</span><span class="s2">().</span><span class="s1">getHeading</span><span class="s2">() - </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">PI </span><span class="s2">/ </span><span class="s6">2</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">end</span><span class="s2">) {</span>
+            <span class="s0">if </span><span class="s2">(!</span><span class="s1">stopping</span><span class="s2">) {</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">Math</span><span class="s2">.</span><span class="s1">abs</span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getVelocity</span><span class="s2">().</span><span class="s1">dot</span><span class="s2">(</span><span class="s1">heading</span><span class="s2">)) &gt; </span><span class="s1">VELOCITY</span><span class="s2">) {</span>
+                    <span class="s1">previousVelocity </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">abs</span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getVelocity</span><span class="s2">().</span><span class="s1">dot</span><span class="s2">(</span><span class="s1">heading</span><span class="s2">));</span>
+                    <span class="s1">previousTimeNano </span><span class="s2">= </span><span class="s1">System</span><span class="s2">.</span><span class="s1">nanoTime</span><span class="s2">();</span>
+                    <span class="s1">stopping </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+                    <span class="s1">follower</span><span class="s2">.</span><span class="s1">setTeleOpDrive</span><span class="s2">(</span><span class="s6">0</span><span class="s2">,</span><span class="s6">0</span><span class="s2">,</span><span class="s6">0</span><span class="s2">,</span><span class="s0">true</span><span class="s2">);</span>
+                <span class="s2">}</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s0">double </span><span class="s1">currentVelocity </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">abs</span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getVelocity</span><span class="s2">().</span><span class="s1">dot</span><span class="s2">(</span><span class="s1">heading</span><span class="s2">));</span>
+                <span class="s1">accelerations</span><span class="s2">.</span><span class="s1">add</span><span class="s2">((</span><span class="s1">currentVelocity </span><span class="s2">- </span><span class="s1">previousVelocity</span><span class="s2">) / ((</span><span class="s1">System</span><span class="s2">.</span><span class="s1">nanoTime</span><span class="s2">() - </span><span class="s1">previousTimeNano</span><span class="s2">) / </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">pow</span><span class="s2">(</span><span class="s6">10.0</span><span class="s2">, </span><span class="s6">9</span><span class="s2">)));</span>
+                <span class="s1">previousVelocity </span><span class="s2">= </span><span class="s1">currentVelocity</span><span class="s2">;</span>
+                <span class="s1">previousTimeNano </span><span class="s2">= </span><span class="s1">System</span><span class="s2">.</span><span class="s1">nanoTime</span><span class="s2">();</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">currentVelocity </span><span class="s2">&lt; </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getConstraints</span><span class="s2">().</span><span class="s1">getVelocityConstraint</span><span class="s2">()) {</span>
+                    <span class="s1">end </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+                <span class="s2">}</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s0">double </span><span class="s1">average </span><span class="s2">= </span><span class="s6">0</span><span class="s2">;</span>
+            <span class="s0">for </span><span class="s2">(</span><span class="s0">double </span><span class="s1">acceleration </span><span class="s2">: </span><span class="s1">accelerations</span><span class="s2">) {</span>
+                <span class="s1">average </span><span class="s2">+= </span><span class="s1">acceleration</span><span class="s2">;</span>
+            <span class="s2">}</span>
+            <span class="s1">average </span><span class="s2">/= </span><span class="s1">accelerations</span><span class="s2">.</span><span class="s1">size</span><span class="s2">();</span>
+
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Lateral Zero Power Acceleration (Deceleration): &quot; </span><span class="s2">+ </span><span class="s1">average</span><span class="s2">);</span>
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;</span><span class="s0">\n</span><span class="s5">&quot;</span><span class="s2">);</span>
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Press A to set the Lateral Zero Power Acceleration temporarily (while robot remains on).&quot;</span><span class="s2">);</span>
+            <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">gamepad1</span><span class="s2">.</span><span class="s1">aWasPressed</span><span class="s2">()) {</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">getConstants</span><span class="s2">().</span><span class="s1">setLateralZeroPowerAcceleration</span><span class="s2">(</span><span class="s1">average</span><span class="s2">);</span>
+                <span class="s1">String message </span><span class="s2">= </span><span class="s5">&quot;Lateral Zero Power Acceleration: &quot; </span><span class="s2">+ </span><span class="s1">average</span><span class="s2">;</span>
+                <span class="s1">changes</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">message</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the Translational PIDF Tuner OpMode. It will keep the robot in place.</span>
+ <span class="s3">* The user should push the robot laterally to test the PIDF and adjust the PIDF values accordingly.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Baron Henderson - 20077 The Indubitables</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Anyi Lin - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Aaron Yang - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Harrison Womack - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0, 3/12/2024</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">TranslationalTuner </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+    <span class="s0">public static double </span><span class="s1">DISTANCE </span><span class="s2">= </span><span class="s6">40</span><span class="s2">;</span>
+    <span class="s0">private boolean </span><span class="s1">forward </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+
+    <span class="s0">private </span><span class="s1">Path forwards</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">Path backwards</span><span class="s2">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This initializes the Follower and creates the forward and backward Paths. */</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init_loop</span><span class="s2">() {</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;This will activate the translational PIDF(s)&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;The robot will try to stay in place while you push it laterally.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;You can adjust the PIDF values to tune the robot's translational PIDF(s).&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">start</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">deactivateAllPIDFs</span><span class="s2">();</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">activateTranslational</span><span class="s2">();</span>
+        <span class="s1">forwards </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Path</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierLine</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">)));</span>
+        <span class="s1">forwards</span><span class="s2">.</span><span class="s1">setConstantHeadingInterpolation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">);</span>
+        <span class="s1">backwards </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Path</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierLine</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">)));</span>
+        <span class="s1">backwards</span><span class="s2">.</span><span class="s1">setConstantHeadingInterpolation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">forwards</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This runs the OpMode, updating the Follower as well as printing out the debug statements to the Telemetry */</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">draw</span><span class="s2">();</span>
+
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">isBusy</span><span class="s2">()) {</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">forward</span><span class="s2">) {</span>
+                <span class="s1">forward </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">backwards</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">forward </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">forwards</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Push the robot laterally to test the Translational PIDF(s).&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">addData</span><span class="s2">(</span><span class="s5">&quot;Zero Line&quot;</span><span class="s2">, </span><span class="s6">0</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">addData</span><span class="s2">(</span><span class="s5">&quot;Error X&quot;</span><span class="s2">, </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">errorCalculator</span><span class="s2">.</span><span class="s1">getTranslationalError</span><span class="s2">().</span><span class="s1">getXComponent</span><span class="s2">());</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">addData</span><span class="s2">(</span><span class="s5">&quot;Error Y&quot;</span><span class="s2">, </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">errorCalculator</span><span class="s2">.</span><span class="s1">getTranslationalError</span><span class="s2">().</span><span class="s1">getYComponent</span><span class="s2">());</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the Heading PIDF Tuner OpMode. It will keep the robot in place.</span>
+ <span class="s3">* The user should try to turn the robot to test the PIDF and adjust the PIDF values accordingly.</span>
+ <span class="s3">* It will try to keep the robot at a constant heading while the user tries to turn it.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Baron Henderson - 20077 The Indubitables</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Anyi Lin - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Aaron Yang - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Harrison Womack - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0, 3/12/2024</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">HeadingTuner </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+    <span class="s0">public static double </span><span class="s1">DISTANCE </span><span class="s2">= </span><span class="s6">40</span><span class="s2">;</span>
+    <span class="s0">private boolean </span><span class="s1">forward </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+
+    <span class="s0">private </span><span class="s1">Path forwards</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">Path backwards</span><span class="s2">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This initializes the Follower and creates the forward and backward Paths. Additionally, this</span>
+     <span class="s3">* initializes the Panels telemetry.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init_loop</span><span class="s2">() {</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;This will activate the heading PIDF(s).&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;The robot will try to stay at a constant heading while you try to turn it.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;You can adjust the PIDF values to tune the robot's heading PIDF(s).&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">start</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">deactivateAllPIDFs</span><span class="s2">();</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">activateHeading</span><span class="s2">();</span>
+        <span class="s1">forwards </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Path</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierLine</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">)));</span>
+        <span class="s1">forwards</span><span class="s2">.</span><span class="s1">setConstantHeadingInterpolation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">);</span>
+        <span class="s1">backwards </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Path</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierLine</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">)));</span>
+        <span class="s1">backwards</span><span class="s2">.</span><span class="s1">setConstantHeadingInterpolation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">forwards</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This runs the OpMode, updating the Follower as well as printing out the debug statements to</span>
+     <span class="s3">* the Telemetry, as well as the Panels.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">draw</span><span class="s2">();</span>
+
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">isBusy</span><span class="s2">()) {</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">forward</span><span class="s2">) {</span>
+                <span class="s1">forward </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">backwards</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">forward </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">forwards</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Turn the robot manually to test the Heading PIDF(s).&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">addData</span><span class="s2">(</span><span class="s5">&quot;Zero Line&quot;</span><span class="s2">, </span><span class="s6">0</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">addData</span><span class="s2">(</span><span class="s5">&quot;Error&quot;</span><span class="s2">, </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">errorCalculator</span><span class="s2">.</span><span class="s1">getHeadingError</span><span class="s2">());</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the Drive PIDF Tuner OpMode. It will run the robot in a straight line going forward and back.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Baron Henderson - 20077 The Indubitables</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Anyi Lin - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Aaron Yang - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Harrison Womack - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0, 3/12/2024</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">DriveTuner </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+    <span class="s0">public static double </span><span class="s1">DISTANCE </span><span class="s2">= </span><span class="s6">40</span><span class="s2">;</span>
+    <span class="s0">private boolean </span><span class="s1">forward </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+
+    <span class="s0">private </span><span class="s1">PathChain forwards</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">PathChain backwards</span><span class="s2">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This initializes the Follower and creates the forward and backward Paths. Additionally, this</span>
+     <span class="s3">* initializes the Panels telemetry.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init_loop</span><span class="s2">() {</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;This will run the robot in a straight line going &quot; </span><span class="s2">+ </span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s5">&quot;inches forward.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;The robot will go forward and backward continuously along the path.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Make sure you have enough room.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">start</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">deactivateAllPIDFs</span><span class="s2">();</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">activateDrive</span><span class="s2">();</span>
+
+        <span class="s1">forwards </span><span class="s2">= </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">pathBuilder</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">setGlobalDeceleration</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">addPath</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierLine</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">)))</span>
+                <span class="s2">.</span><span class="s1">setConstantHeadingInterpolation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">build</span><span class="s2">();</span>
+
+        <span class="s1">backwards </span><span class="s2">= </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">pathBuilder</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">setGlobalDeceleration</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">addPath</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierLine</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">)))</span>
+                <span class="s2">.</span><span class="s1">setConstantHeadingInterpolation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">build</span><span class="s2">();</span>
+
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">forwards</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This runs the OpMode, updating the Follower as well as printing out the debug statements to</span>
+     <span class="s3">* the Telemetry, as well as the Panels.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">draw</span><span class="s2">();</span>
+
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">isBusy</span><span class="s2">()) {</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">forward</span><span class="s2">) {</span>
+                <span class="s1">forward </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">backwards</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">forward </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">forwards</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Driving forward?: &quot; </span><span class="s2">+ </span><span class="s1">forward</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">addData</span><span class="s2">(</span><span class="s5">&quot;Zero Line&quot;</span><span class="s2">, </span><span class="s6">0</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">addData</span><span class="s2">(</span><span class="s5">&quot;Error&quot;</span><span class="s2">, </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">errorCalculator</span><span class="s2">.</span><span class="s1">getDriveErrors</span><span class="s2">()[</span><span class="s6">1</span><span class="s2">]);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the Line Test Tuner OpMode. It will drive the robot forward and back</span>
+ <span class="s3">* The user should push the robot laterally and angular to test out the drive, heading, and translational PIDFs.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Baron Henderson - 20077 The Indubitables</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Anyi Lin - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Aaron Yang - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Harrison Womack - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0, 3/12/2024</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">Line </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+    <span class="s0">public static double </span><span class="s1">DISTANCE </span><span class="s2">= </span><span class="s6">40</span><span class="s2">;</span>
+    <span class="s0">private boolean </span><span class="s1">forward </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+
+    <span class="s0">private </span><span class="s1">Path forwards</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">Path backwards</span><span class="s2">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This initializes the Follower and creates the forward and backward Paths. */</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init_loop</span><span class="s2">() {</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;This will activate all the PIDF(s)&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;The robot will go forward and backward continuously along the path while correcting.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;You can adjust the PIDF values to tune the robot's drive PIDF(s).&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">start</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">activateAllPIDFs</span><span class="s2">();</span>
+        <span class="s1">forwards </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Path</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierLine</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">)));</span>
+        <span class="s1">forwards</span><span class="s2">.</span><span class="s1">setConstantHeadingInterpolation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">);</span>
+        <span class="s1">backwards </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Path</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierLine</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">)));</span>
+        <span class="s1">backwards</span><span class="s2">.</span><span class="s1">setConstantHeadingInterpolation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">forwards</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** This runs the OpMode, updating the Follower as well as printing out the debug statements to the Telemetry */</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">draw</span><span class="s2">();</span>
+
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">isBusy</span><span class="s2">()) {</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">forward</span><span class="s2">) {</span>
+                <span class="s1">forward </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">backwards</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">forward </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">forwards</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Driving Forward?: &quot; </span><span class="s2">+ </span><span class="s1">forward</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the Centripetal Tuner OpMode. It runs the robot in a specified distance</span>
+ <span class="s3">* forward and to the left. On reaching the end of the forward Path, the robot runs the backward</span>
+ <span class="s3">* Path the same distance back to the start. Rinse and repeat! This is good for testing a variety</span>
+ <span class="s3">* of Vectors, like the drive Vector, the translational Vector, the heading Vector, and the</span>
+ <span class="s3">* centripetal Vector.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Baron Henderson - 20077 The Indubitables</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Anyi Lin - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Aaron Yang - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Harrison Womack - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0, 3/13/2024</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">CentripetalTuner </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+    <span class="s0">public static double </span><span class="s1">DISTANCE </span><span class="s2">= </span><span class="s6">20</span><span class="s2">;</span>
+    <span class="s0">private boolean </span><span class="s1">forward </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+
+    <span class="s0">private </span><span class="s1">Path forwards</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">Path backwards</span><span class="s2">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This initializes the Follower and creates the forward and backward Paths.</span>
+     <span class="s3">* Additionally, this initializes the Panels telemetry.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init_loop</span><span class="s2">() {</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;This will run the robot in a curve going &quot; </span><span class="s2">+ </span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s5">&quot; inches to the left and the same number of inches forward.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;The robot will go continuously along the path.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Make sure you have enough room.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">start</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">activateAllPIDFs</span><span class="s2">();</span>
+        <span class="s1">forwards </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Path</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierCurve</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">Math</span><span class="s2">.</span><span class="s1">abs</span><span class="s2">(</span><span class="s1">DISTANCE</span><span class="s2">) + </span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">Math</span><span class="s2">.</span><span class="s1">abs</span><span class="s2">(</span><span class="s1">DISTANCE</span><span class="s2">) + </span><span class="s6">72</span><span class="s2">,</span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">)));</span>
+        <span class="s1">backwards </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Path</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierCurve</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">Math</span><span class="s2">.</span><span class="s1">abs</span><span class="s2">(</span><span class="s1">DISTANCE</span><span class="s2">) + </span><span class="s6">72</span><span class="s2">,</span><span class="s1">DISTANCE </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">Math</span><span class="s2">.</span><span class="s1">abs</span><span class="s2">(</span><span class="s1">DISTANCE</span><span class="s2">) + </span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">,</span><span class="s6">72</span><span class="s2">)));</span>
+
+        <span class="s1">backwards</span><span class="s2">.</span><span class="s1">setTangentHeadingInterpolation</span><span class="s2">();</span>
+        <span class="s1">backwards</span><span class="s2">.</span><span class="s1">reverseHeadingInterpolation</span><span class="s2">();</span>
+
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">forwards</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This runs the OpMode, updating the Follower as well as printing out the debug statements to</span>
+     <span class="s3">* the Telemetry, as well as the Panels.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">draw</span><span class="s2">();</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">isBusy</span><span class="s2">()) {</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">forward</span><span class="s2">) {</span>
+                <span class="s1">forward </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">backwards</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">forward </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+                <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">forwards</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;Driving away from the origin along the curve?: &quot; </span><span class="s2">+ </span><span class="s1">forward</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the Triangle autonomous OpMode.</span>
+ <span class="s3">* It runs the robot in a triangle, with the starting point being the bottom-middle point.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Baron Henderson - 20077 The Indubitables</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Samarth Mahapatra - 1002 CircuitRunners Robotics Surge</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0, 12/30/2024</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">Triangle </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+
+    <span class="s0">private final </span><span class="s1">Pose startPose </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">, </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">toRadians</span><span class="s2">(</span><span class="s6">0</span><span class="s2">));</span>
+    <span class="s0">private final </span><span class="s1">Pose interPose </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">24 </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">, -</span><span class="s6">24 </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">, </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">toRadians</span><span class="s2">(</span><span class="s6">90</span><span class="s2">));</span>
+    <span class="s0">private final </span><span class="s1">Pose endPose </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">24 </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">, </span><span class="s6">24 </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">, </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">toRadians</span><span class="s2">(</span><span class="s6">45</span><span class="s2">));</span>
+
+    <span class="s0">private </span><span class="s1">PathChain triangle</span><span class="s2">;</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This runs the OpMode, updating the Follower as well as printing out the debug statements to</span>
+     <span class="s3">* the Telemetry, as well as the Panels.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">draw</span><span class="s2">();</span>
+
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">atParametricEnd</span><span class="s2">()) {</span>
+            <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">triangle</span><span class="s2">, </span><span class="s0">true</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init_loop</span><span class="s2">() {</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;This will run in a roughly triangular shape, starting on the bottom-middle point.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;So, make sure you have enough space to the left, front, and right to run the OpMode.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/** Creates the PathChain for the &quot;triangle&quot;.*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">start</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s1">startPose</span><span class="s2">);</span>
+
+        <span class="s1">triangle </span><span class="s2">= </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">pathBuilder</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">addPath</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierLine</span><span class="s2">(</span><span class="s1">startPose</span><span class="s2">, </span><span class="s1">interPose</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">setLinearHeadingInterpolation</span><span class="s2">(</span><span class="s1">startPose</span><span class="s2">.</span><span class="s1">getHeading</span><span class="s2">(), </span><span class="s1">interPose</span><span class="s2">.</span><span class="s1">getHeading</span><span class="s2">())</span>
+                <span class="s2">.</span><span class="s1">addPath</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierLine</span><span class="s2">(</span><span class="s1">interPose</span><span class="s2">, </span><span class="s1">endPose</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">setLinearHeadingInterpolation</span><span class="s2">(</span><span class="s1">interPose</span><span class="s2">.</span><span class="s1">getHeading</span><span class="s2">(), </span><span class="s1">endPose</span><span class="s2">.</span><span class="s1">getHeading</span><span class="s2">())</span>
+                <span class="s2">.</span><span class="s1">addPath</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierLine</span><span class="s2">(</span><span class="s1">endPose</span><span class="s2">, </span><span class="s1">startPose</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">setLinearHeadingInterpolation</span><span class="s2">(</span><span class="s1">endPose</span><span class="s2">.</span><span class="s1">getHeading</span><span class="s2">(), </span><span class="s1">startPose</span><span class="s2">.</span><span class="s1">getHeading</span><span class="s2">())</span>
+                <span class="s2">.</span><span class="s1">build</span><span class="s2">();</span>
+
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">triangle</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the Circle autonomous OpMode. It runs the robot in a PathChain that's actually not quite</span>
+ <span class="s3">* a circle, but some Bezier curves that have control points set essentially in a square. However,</span>
+ <span class="s3">* it turns enough to tune your centripetal force correction and some of your heading. Some lag in</span>
+ <span class="s3">* heading is to be expected.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Anyi Lin - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Aaron Yang - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Harrison Womack - 10158 Scott's Bots</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0, 3/12/2024</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">Circle </span><span class="s0">extends </span><span class="s1">OpMode </span><span class="s2">{</span>
+    <span class="s0">public static double </span><span class="s1">RADIUS </span><span class="s2">= </span><span class="s6">10</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">PathChain circle</span><span class="s2">;</span>
+
+    <span class="s0">public void </span><span class="s1">start</span><span class="s2">() {</span>
+        <span class="s1">circle </span><span class="s2">= </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">pathBuilder</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">addPath</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierCurve</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">, </span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">)))</span>
+                <span class="s2">.</span><span class="s1">setHeadingInterpolation</span><span class="s2">(</span><span class="s1">HeadingInterpolator</span><span class="s2">.</span><span class="s1">facingPoint</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">addPath</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierCurve</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">, </span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">, (</span><span class="s6">2 </span><span class="s2">* </span><span class="s1">RADIUS</span><span class="s2">) + </span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, (</span><span class="s6">2 </span><span class="s2">* </span><span class="s1">RADIUS</span><span class="s2">) + </span><span class="s6">72</span><span class="s2">)))</span>
+                <span class="s2">.</span><span class="s1">setHeadingInterpolation</span><span class="s2">(</span><span class="s1">HeadingInterpolator</span><span class="s2">.</span><span class="s1">facingPoint</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">addPath</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierCurve</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, (</span><span class="s6">2 </span><span class="s2">* </span><span class="s1">RADIUS</span><span class="s2">) + </span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(-</span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">, (</span><span class="s6">2 </span><span class="s2">* </span><span class="s1">RADIUS</span><span class="s2">) + </span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(-</span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">, </span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">)))</span>
+                <span class="s2">.</span><span class="s1">setHeadingInterpolation</span><span class="s2">(</span><span class="s1">HeadingInterpolator</span><span class="s2">.</span><span class="s1">facingPoint</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">addPath</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BezierCurve</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(-</span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">, </span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(-</span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">), </span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">)))</span>
+                <span class="s2">.</span><span class="s1">setHeadingInterpolation</span><span class="s2">(</span><span class="s1">HeadingInterpolator</span><span class="s2">.</span><span class="s1">facingPoint</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s6">72</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">build</span><span class="s2">();</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">circle</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init_loop</span><span class="s2">() {</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;This will run in a roughly circular shape of radius &quot; </span><span class="s2">+ </span><span class="s1">RADIUS </span><span class="s2">+ </span><span class="s5">&quot;, starting on the right-most edge. &quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;So, make sure you have enough space to the left, front, and back to run the OpMode.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">debug</span><span class="s2">(</span><span class="s5">&quot;It will also continuously face the center of the circle to test your heading and centripetal correction.&quot;</span><span class="s2">);</span>
+        <span class="s1">telemetryM</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">telemetry</span><span class="s2">);</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">drawOnlyCurrent</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">setStartingPose</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s6">72</span><span class="s2">, </span><span class="s6">72</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This runs the OpMode, updating the Follower as well as printing out the debug statements to</span>
+     <span class="s3">* the Telemetry, as well as the FTC Dashboard.</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">loop</span><span class="s2">() {</span>
+        <span class="s1">follower</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+        <span class="s1">draw</span><span class="s2">();</span>
+
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">atParametricEnd</span><span class="s2">()) {</span>
+            <span class="s1">follower</span><span class="s2">.</span><span class="s1">followPath</span><span class="s2">(</span><span class="s1">circle</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* This is the Drawing class. It handles the drawing of stuff on Panels Dashboard, like the robot.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Lazar - 19234</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.1, 5/19/2025</span>
+ <span class="s3">*/</span>
+<span class="s0">class </span><span class="s1">Drawing </span><span class="s2">{</span>
+    <span class="s0">public static final double </span><span class="s1">ROBOT_RADIUS </span><span class="s2">= </span><span class="s6">9</span><span class="s2">; </span><span class="s7">// woah</span>
+    <span class="s0">private static final </span><span class="s1">FieldManager panelsField </span><span class="s2">= </span><span class="s1">PanelsField</span><span class="s2">.</span><span class="s1">INSTANCE</span><span class="s2">.</span><span class="s1">getField</span><span class="s2">();</span>
+
+    <span class="s0">private static final </span><span class="s1">Style robotLook </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Style</span><span class="s2">(</span>
+            <span class="s5">&quot;&quot;</span><span class="s2">, </span><span class="s5">&quot;#3F51B5&quot;</span><span class="s2">, </span><span class="s6">0.75</span>
+    <span class="s2">);</span>
+    <span class="s0">private static final </span><span class="s1">Style historyLook </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Style</span><span class="s2">(</span>
+            <span class="s5">&quot;&quot;</span><span class="s2">, </span><span class="s5">&quot;#4CAF50&quot;</span><span class="s2">, </span><span class="s6">0.75</span>
+    <span class="s2">);</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This prepares Panels Field for using Pedro Offsets</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static void </span><span class="s1">init</span><span class="s2">() {</span>
+        <span class="s1">panelsField</span><span class="s2">.</span><span class="s1">setOffsets</span><span class="s2">(</span><span class="s1">PanelsField</span><span class="s2">.</span><span class="s1">INSTANCE</span><span class="s2">.</span><span class="s1">getPresets</span><span class="s2">().</span><span class="s1">getPEDRO_PATHING</span><span class="s2">());</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This draws everything that will be used in the Follower's telemetryDebug() method. This takes</span>
+     <span class="s3">* a Follower as an input, so an instance of the DashbaordDrawingHandler class is not needed.</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">follower Pedro Follower instance.</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static void </span><span class="s1">drawDebug</span><span class="s2">(</span><span class="s1">Follower follower</span><span class="s2">) {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getCurrentPath</span><span class="s2">() != </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s1">drawPath</span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getCurrentPath</span><span class="s2">(), </span><span class="s1">robotLook</span><span class="s2">);</span>
+            <span class="s1">Pose closestPoint </span><span class="s2">= </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPointFromPath</span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getCurrentPath</span><span class="s2">().</span><span class="s1">getClosestPointTValue</span><span class="s2">());</span>
+            <span class="s1">drawRobot</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Pose</span><span class="s2">(</span><span class="s1">closestPoint</span><span class="s2">.</span><span class="s1">getX</span><span class="s2">(), </span><span class="s1">closestPoint</span><span class="s2">.</span><span class="s1">getY</span><span class="s2">(), </span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getCurrentPath</span><span class="s2">().</span><span class="s1">getHeadingGoal</span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getCurrentPath</span><span class="s2">().</span><span class="s1">getClosestPointTValue</span><span class="s2">())), </span><span class="s1">robotLook</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s1">drawPoseHistory</span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPoseHistory</span><span class="s2">(), </span><span class="s1">historyLook</span><span class="s2">);</span>
+        <span class="s1">drawRobot</span><span class="s2">(</span><span class="s1">follower</span><span class="s2">.</span><span class="s1">getPose</span><span class="s2">(), </span><span class="s1">historyLook</span><span class="s2">);</span>
+
+        <span class="s1">sendPacket</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This draws a robot at a specified Pose with a specified</span>
+     <span class="s3">* look. The heading is represented as a line.</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">pose  the Pose to draw the robot at</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">style the parameters used to draw the robot with</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static void </span><span class="s1">drawRobot</span><span class="s2">(</span><span class="s1">Pose pose</span><span class="s2">, </span><span class="s1">Style style</span><span class="s2">) {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">pose </span><span class="s2">== </span><span class="s0">null </span><span class="s2">|| </span><span class="s1">Double</span><span class="s2">.</span><span class="s1">isNaN</span><span class="s2">(</span><span class="s1">pose</span><span class="s2">.</span><span class="s1">getX</span><span class="s2">()) || </span><span class="s1">Double</span><span class="s2">.</span><span class="s1">isNaN</span><span class="s2">(</span><span class="s1">pose</span><span class="s2">.</span><span class="s1">getY</span><span class="s2">()) || </span><span class="s1">Double</span><span class="s2">.</span><span class="s1">isNaN</span><span class="s2">(</span><span class="s1">pose</span><span class="s2">.</span><span class="s1">getHeading</span><span class="s2">())) {</span>
+            <span class="s0">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s1">panelsField</span><span class="s2">.</span><span class="s1">setStyle</span><span class="s2">(</span><span class="s1">style</span><span class="s2">);</span>
+        <span class="s1">panelsField</span><span class="s2">.</span><span class="s1">moveCursor</span><span class="s2">(</span><span class="s1">pose</span><span class="s2">.</span><span class="s1">getX</span><span class="s2">(), </span><span class="s1">pose</span><span class="s2">.</span><span class="s1">getY</span><span class="s2">());</span>
+        <span class="s1">panelsField</span><span class="s2">.</span><span class="s1">circle</span><span class="s2">(</span><span class="s1">ROBOT_RADIUS</span><span class="s2">);</span>
+
+        <span class="s1">Vector v </span><span class="s2">= </span><span class="s1">pose</span><span class="s2">.</span><span class="s1">getHeadingAsUnitVector</span><span class="s2">();</span>
+        <span class="s1">v</span><span class="s2">.</span><span class="s1">setMagnitude</span><span class="s2">(</span><span class="s1">v</span><span class="s2">.</span><span class="s1">getMagnitude</span><span class="s2">() * </span><span class="s1">ROBOT_RADIUS</span><span class="s2">);</span>
+        <span class="s0">double </span><span class="s1">x1 </span><span class="s2">= </span><span class="s1">pose</span><span class="s2">.</span><span class="s1">getX</span><span class="s2">() + </span><span class="s1">v</span><span class="s2">.</span><span class="s1">getXComponent</span><span class="s2">() / </span><span class="s6">2</span><span class="s2">, </span><span class="s1">y1 </span><span class="s2">= </span><span class="s1">pose</span><span class="s2">.</span><span class="s1">getY</span><span class="s2">() + </span><span class="s1">v</span><span class="s2">.</span><span class="s1">getYComponent</span><span class="s2">() / </span><span class="s6">2</span><span class="s2">;</span>
+        <span class="s0">double </span><span class="s1">x2 </span><span class="s2">= </span><span class="s1">pose</span><span class="s2">.</span><span class="s1">getX</span><span class="s2">() + </span><span class="s1">v</span><span class="s2">.</span><span class="s1">getXComponent</span><span class="s2">(), </span><span class="s1">y2 </span><span class="s2">= </span><span class="s1">pose</span><span class="s2">.</span><span class="s1">getY</span><span class="s2">() + </span><span class="s1">v</span><span class="s2">.</span><span class="s1">getYComponent</span><span class="s2">();</span>
+
+        <span class="s1">panelsField</span><span class="s2">.</span><span class="s1">setStyle</span><span class="s2">(</span><span class="s1">style</span><span class="s2">);</span>
+        <span class="s1">panelsField</span><span class="s2">.</span><span class="s1">moveCursor</span><span class="s2">(</span><span class="s1">x1</span><span class="s2">, </span><span class="s1">y1</span><span class="s2">);</span>
+        <span class="s1">panelsField</span><span class="s2">.</span><span class="s1">line</span><span class="s2">(</span><span class="s1">x2</span><span class="s2">, </span><span class="s1">y2</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This draws a robot at a specified Pose. The heading is represented as a line.</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">pose the Pose to draw the robot at</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static void </span><span class="s1">drawRobot</span><span class="s2">(</span><span class="s1">Pose pose</span><span class="s2">) {</span>
+        <span class="s1">drawRobot</span><span class="s2">(</span><span class="s1">pose</span><span class="s2">, </span><span class="s1">robotLook</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This draws a Path with a specified look.</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">path  the Path to draw</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">style the parameters used to draw the Path with</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static void </span><span class="s1">drawPath</span><span class="s2">(</span><span class="s1">Path path</span><span class="s2">, </span><span class="s1">Style style</span><span class="s2">) {</span>
+        <span class="s0">double</span><span class="s2">[][] </span><span class="s1">points </span><span class="s2">= </span><span class="s1">path</span><span class="s2">.</span><span class="s1">getPanelsDrawingPoints</span><span class="s2">();</span>
+
+        <span class="s0">for </span><span class="s2">(</span><span class="s0">int </span><span class="s1">i </span><span class="s2">= </span><span class="s6">0</span><span class="s2">; </span><span class="s1">i </span><span class="s2">&lt; </span><span class="s1">points</span><span class="s2">[</span><span class="s6">0</span><span class="s2">].</span><span class="s1">length</span><span class="s2">; </span><span class="s1">i</span><span class="s2">++) {</span>
+            <span class="s0">for </span><span class="s2">(</span><span class="s0">int </span><span class="s1">j </span><span class="s2">= </span><span class="s6">0</span><span class="s2">; </span><span class="s1">j </span><span class="s2">&lt; </span><span class="s1">points</span><span class="s2">.</span><span class="s1">length</span><span class="s2">; </span><span class="s1">j</span><span class="s2">++) {</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">Double</span><span class="s2">.</span><span class="s1">isNaN</span><span class="s2">(</span><span class="s1">points</span><span class="s2">[</span><span class="s1">j</span><span class="s2">][</span><span class="s1">i</span><span class="s2">])) {</span>
+                    <span class="s1">points</span><span class="s2">[</span><span class="s1">j</span><span class="s2">][</span><span class="s1">i</span><span class="s2">] = </span><span class="s6">0</span><span class="s2">;</span>
+                <span class="s2">}</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+        <span class="s1">panelsField</span><span class="s2">.</span><span class="s1">setStyle</span><span class="s2">(</span><span class="s1">style</span><span class="s2">);</span>
+        <span class="s1">panelsField</span><span class="s2">.</span><span class="s1">moveCursor</span><span class="s2">(</span><span class="s1">points</span><span class="s2">[</span><span class="s6">0</span><span class="s2">][</span><span class="s6">0</span><span class="s2">], </span><span class="s1">points</span><span class="s2">[</span><span class="s6">0</span><span class="s2">][</span><span class="s6">1</span><span class="s2">]);</span>
+        <span class="s1">panelsField</span><span class="s2">.</span><span class="s1">line</span><span class="s2">(</span><span class="s1">points</span><span class="s2">[</span><span class="s6">1</span><span class="s2">][</span><span class="s6">0</span><span class="s2">], </span><span class="s1">points</span><span class="s2">[</span><span class="s6">1</span><span class="s2">][</span><span class="s6">1</span><span class="s2">]);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This draws all the Paths in a PathChain with a</span>
+     <span class="s3">* specified look.</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">pathChain the PathChain to draw</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">style     the parameters used to draw the PathChain with</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static void </span><span class="s1">drawPath</span><span class="s2">(</span><span class="s1">PathChain pathChain</span><span class="s2">, </span><span class="s1">Style style</span><span class="s2">) {</span>
+        <span class="s0">for </span><span class="s2">(</span><span class="s0">int </span><span class="s1">i </span><span class="s2">= </span><span class="s6">0</span><span class="s2">; </span><span class="s1">i </span><span class="s2">&lt; </span><span class="s1">pathChain</span><span class="s2">.</span><span class="s1">size</span><span class="s2">(); </span><span class="s1">i</span><span class="s2">++) {</span>
+            <span class="s1">drawPath</span><span class="s2">(</span><span class="s1">pathChain</span><span class="s2">.</span><span class="s1">getPath</span><span class="s2">(</span><span class="s1">i</span><span class="s2">), </span><span class="s1">style</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This draws the pose history of the robot.</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">poseTracker the PoseHistory to get the pose history from</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">style       the parameters used to draw the pose history with</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static void </span><span class="s1">drawPoseHistory</span><span class="s2">(</span><span class="s1">PoseHistory poseTracker</span><span class="s2">, </span><span class="s1">Style style</span><span class="s2">) {</span>
+        <span class="s1">panelsField</span><span class="s2">.</span><span class="s1">setStyle</span><span class="s2">(</span><span class="s1">style</span><span class="s2">);</span>
+
+        <span class="s0">int </span><span class="s1">size </span><span class="s2">= </span><span class="s1">poseTracker</span><span class="s2">.</span><span class="s1">getXPositionsArray</span><span class="s2">().</span><span class="s1">length</span><span class="s2">;</span>
+        <span class="s0">for </span><span class="s2">(</span><span class="s0">int </span><span class="s1">i </span><span class="s2">= </span><span class="s6">0</span><span class="s2">; </span><span class="s1">i </span><span class="s2">&lt; </span><span class="s1">size </span><span class="s2">- </span><span class="s6">1</span><span class="s2">; </span><span class="s1">i</span><span class="s2">++) {</span>
+
+            <span class="s1">panelsField</span><span class="s2">.</span><span class="s1">moveCursor</span><span class="s2">(</span><span class="s1">poseTracker</span><span class="s2">.</span><span class="s1">getXPositionsArray</span><span class="s2">()[</span><span class="s1">i</span><span class="s2">], </span><span class="s1">poseTracker</span><span class="s2">.</span><span class="s1">getYPositionsArray</span><span class="s2">()[</span><span class="s1">i</span><span class="s2">]);</span>
+            <span class="s1">panelsField</span><span class="s2">.</span><span class="s1">line</span><span class="s2">(</span><span class="s1">poseTracker</span><span class="s2">.</span><span class="s1">getXPositionsArray</span><span class="s2">()[</span><span class="s1">i </span><span class="s2">+ </span><span class="s6">1</span><span class="s2">], </span><span class="s1">poseTracker</span><span class="s2">.</span><span class="s1">getYPositionsArray</span><span class="s2">()[</span><span class="s1">i </span><span class="s2">+ </span><span class="s6">1</span><span class="s2">]);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This draws the pose history of the robot.</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">poseTracker the PoseHistory to get the pose history from</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static void </span><span class="s1">drawPoseHistory</span><span class="s2">(</span><span class="s1">PoseHistory poseTracker</span><span class="s2">) {</span>
+        <span class="s1">drawPoseHistory</span><span class="s2">(</span><span class="s1">poseTracker</span><span class="s2">, </span><span class="s1">historyLook</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* This tries to send the current packet to FTControl Panels.</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static void </span><span class="s1">sendPacket</span><span class="s2">() {</span>
+        <span class="s1">panelsField</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>
