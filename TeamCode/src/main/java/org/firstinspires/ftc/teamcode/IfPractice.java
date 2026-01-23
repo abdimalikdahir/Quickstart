@@ -19,7 +19,7 @@ public class IfPractice extends OpMode {
         telemetry.addData("Left Stick Value", motorSpeed);
 
         if(!gamepad1.a) {
-           motorSpeed *= 0.5
+           motorSpeed *= 0.5;
         }
         else() {
             motorSpeed == 1
