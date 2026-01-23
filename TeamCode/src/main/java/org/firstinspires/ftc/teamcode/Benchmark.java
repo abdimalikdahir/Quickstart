@@ -19,7 +19,7 @@ public class Benchmark extends LinearOpMode {
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         flyWheel = hardwareMap.get(DcMotor.class, "flyWheel");
 
-        touchSensor = hardwareMap.get(TouchSensor.class, touchSensor);
+        touchSensor = hardwareMap.get(TouchSensor.class, "touchSensor");
 
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
